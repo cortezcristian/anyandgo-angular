@@ -15,9 +15,10 @@ angular
     'ngResource',
     'ngRoute',
     'ngSanitize',
-    'ngTouch'
+    'ngTouch',
+    'restangular'
   ])
-  .config(function ($routeProvider) {
+  .config(function ($routeProvider, RestangularProvider) {
     $routeProvider
       .when('/', {
         templateUrl: 'views/main.html',
@@ -31,7 +32,29 @@ angular
         templateUrl: 'views/sample.html',
         controller: 'SampleCtrl'
       })
+      .when('/sample-new', {
+        templateUrl: 'views/sample-new.html',
+        controller: 'SampleNewCtrl'
+      })
+      .when('/sample-edit', {
+        templateUrl: 'views/sample-edit.html',
+        controller: 'SampleEditCtrl'
+      })
       .otherwise({
         redirectTo: '/'
+      });
+      
+      RestangularProvider.setBaseUrl('http://localhost:3000/api/v1');
+      RestangularProvider.setRestangularFields({
+        id: '_id.$oid'
+      });
+      
+      RestangularProvider.setRequestInterceptor(function(elem, operation, what) {
+        
+        if (operation === 'put') {
+          elem._id = undefined;
+          return elem;
+        }
+        return elem;
       });
   });
