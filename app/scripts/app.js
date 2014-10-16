@@ -36,9 +36,14 @@ angular
         templateUrl: 'views/sample-new.html',
         controller: 'SampleNewCtrl'
       })
-      .when('/sample-edit', {
+      .when('/sample-edit/:id', {
         templateUrl: 'views/sample-edit.html',
-        controller: 'SampleEditCtrl'
+        controller: 'SampleEditCtrl',
+        resolve: {
+          sample: function(Restangular, $route){
+            return Restangular.one('samples', $route.current.params.id).get();
+          }
+        }
       })
       .otherwise({
         redirectTo: '/'

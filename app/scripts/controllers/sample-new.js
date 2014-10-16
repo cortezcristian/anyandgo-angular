@@ -8,10 +8,10 @@
  * Controller of the anyandgoApp
  */
 angular.module('anyandgoApp')
-  .controller('SampleNewCtrl', function ($scope) {
-    $scope.awesomeThings = [
-      'HTML5 Boilerplate',
-      'AngularJS',
-      'Karma'
-    ];
-  });
+  .controller('SampleNewCtrl', function ($scope, $location, Restangular) {
+  $scope.save = function() {
+    Restangular.all('samples').post($scope.sample).then(function(sample) {
+      $location.path('/sample');
+    });
+  }
+});
